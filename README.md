@@ -19,4 +19,6 @@
 ## Remerciements
 
 *  https://github.com/yinengy/Mersenne-Twister-in-Python pour son code de Mersenne-Twister. (RandomClass.py)
+*  https://www.w3schools.com/w3css/ (w3.css)
+
 
