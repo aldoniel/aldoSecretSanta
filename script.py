@@ -172,8 +172,9 @@ class MainClass():
         document <= html.DIV(Class="w3-container w3-right-align w3-margin-top") <= html.BUTTON("changer de mode",).bind("click",ToggleMode.toggle)
         document <= doc_usr
         document <= doc_adm
-        doc_usr <= html.H1("Le tirage au sort de secret Santa par Aldoniel (Mode utilisateur)")
-        doc_usr <= html.P("Clique sur ton nom pour savoir à qui est secrètement destiné ton cadeau. (Attention ! Sans tricher, un seul essai)")
+        doc_usr <= html.H1("Mode utilisateur")
+        doc_usr <= html.H3("Secret Santa par Aldoniel ")
+        doc_usr <= html.P("Clique sur ton nom pour piocher le destinataire de ton cadeau. (Attention ! Sans tricher, un seul essai)")
         
         #ajouter les boutons des gens
         if self.gens !=[""]:
