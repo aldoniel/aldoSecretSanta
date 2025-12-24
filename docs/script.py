@@ -201,7 +201,7 @@ class MainClass():
         doc_adm <=html.P ('Remarques : Le chiffre qui initialise le générateur de "hasard" permet de garantir que le tirage sera identique chez tout le monde.')
         doc_adm<=html.P(html.BUTTON("Débloquer l'anti-triche : Je promets que c'est à bon escient.").bind("click", self.reset))
 
-app=MainClass()s
+app=MainClass()
 app.main()
 
 #cheat code
