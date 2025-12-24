@@ -2,26 +2,8 @@ from browser import window
 
 class FrenchNameCompressor:
     def __init__(self):
-        # TOP list déjà en lower-case et triée (les plus longs en premier)
-        self.top = [
-            'sébastienne','christophe','véronique','catherine','elisabeth','dominique','alexandre',
-            'priscille','madeleine','christine','sébastien','nathanaël','pascaline','christian',
-            'emmanuel','sandrine','mireille','nathalie','laetitia','ludivine','caroline','baptiste',
-            'isabelle','patricia','gauthier','philippe','timothée','stéphane','thibault','laurence',
-            'françois','aurélie','mohamed','camille','adeline','edouard','thierry','ludovic','nicolas',
-            'sabrina','corinne','martine','raymond','morgane','mathieu','mickaël','bernard','laurent',
-            'sylvain','céleste','jacques','georges','olivier','bastien','estelle','isidore','mélanie',
-            'patrick','fabrice','francis','colette','yasmine','antoine','vincent','valérie','gustave',
-            'monique','marcel','marius','solène','paloma','adrien','nadine','sophie','gérard','noémie',
-            'claude','michel','marine','gilles','cécile','yvonne','daniel','léonie','fabien','honoré',
-            'sylvie','elodie','pascal','pierre','gérald','julien','ariane','maëlle','jérôme','romain',
-            'victor','benoît','claire','céline','damien','hélène','régine','jeanne','maxime','cédric',
-            'carole','arnaud','serge','ethan','cyril','hervé','clara','henri','aline','bruno','sacha',
-            'annie','louis','fanny','régis','julie','sonia','andré','alice','marie','oscar','jules',
-            'denis','félix','roger','alain','agnès','kévin','joël','inès','rené','hugo','lise','lola',
-            'nora','léna','marc','théo','loïc','eric','jean','maya','maud','aude','malo','lina','anne',
-            'paul','noël','yves','éric','rudy','léa','luc','zoé','guy'
-        ]
+        # TOP 300 prénoms insee 2023
+        self.top = ['marie-christine', 'jean-françois', 'marie-thérèse', 'jean-pierre', 'jean-claude', 'jean-michel', 'christophe', 'jacqueline', 'marguerite', 'christiane', 'christelle', 'bernadette', 'anne-marie', 'jean-marie', 'jean-louis', 'emmanuelle', 'antoinette', 'dominique', 'christian', 'françoise', 'catherine', 'madeleine', 'alexandre', 'sébastien', 'christine', 'stéphanie', 'véronique', 'guillaume', 'geneviève', 'elisabeth', 'georgette', 'charlotte', 'henriette', 'micheline', 'gabrielle', 'alexandra', 'jean-marc', 'josephine', 'jean-paul', 'pierrette', 'angelique', 'philippe', 'françois', 'nathalie', 'isabelle', 'frédéric', 'stéphane', 'sandrine', 'marcelle', 'jeannine', 'paulette', 'germaine', 'patricia', 'brigitte', 'laurence', 'juliette', 'virginie', 'lucienne', 'raymonde', 'claudine', 'danielle', 'caroline', 'benjamin', 'florence', 'mathilde', 'emmanuel', 'laetitia', 'béatrice', 'mireille', 'delphine', 'michelle', 'jean-luc', 'valentin', 'baptiste', 'jonathan', 'fabienne', 'jocelyne', 'amandine', 'francine', 'huguette', 'clémence', 'fernande', 'matthieu', 'severine', 'aurélien', 'jacques', 'bernard', 'nicolas', 'georges', 'monique', 'patrick', 'maurice', 'laurent', 'martine', 'suzanne', 'thierry', 'camille', 'antoine', 'olivier', 'raymond', 'valérie', 'charles', 'vincent', 'chantal', 'gabriel', 'aurélie', 'michèle', 'gilbert', 'thérèse', 'colette', 'clément', 'anthony', 'francis', 'corinne', 'pauline', 'raphaël', 'josette', 'mathieu', 'patrice', 'sylvain', 'fabrice', 'mélanie', 'ginette', 'quentin', 'evelyne', 'florian', 'ludovic', 'josiane', 'fernand', 'liliane', 'mickael', 'simonne', 'pascale', 'mohamed', 'sabrina', 'justine', 'yannick', 'solange', 'auguste', 'etienne', 'richard', 'michael', 'vanessa', 'gregory', 'edouard', 'daniele', 'william', 'arlette', 'morgane', 'estelle', 'jessica', 'eugénie', 'lucette', 'florent', 'pierre', 'michel', 'jeanne', 'marcel', 'claude', 'daniel', 'robert', 'gérard', 'joseph', 'sylvie', 'julien', 'pascal', 'nicole', 'louise', 'hélène', 'thomas', 'denise', 'yvonne', 'sophie', 'céline', 'didier', 'maxime', 'simone', 'lucien', 'andrée', 'albert', 'yvette', 'emilie', 'romain', 'odette', 'jerome', 'cécile', 'franck', 'gilles', 'claire', 'elodie', 'alexis', 'audrey', 'adrien', 'gisèle', 'arthur', 'arnaud', 'victor', 'cedric', 'roland', 'nadine', 'annick', 'damien', 'benoît', 'marion', 'marthe', 'karine', 'nathan', 'marine', 'jeremy', 'eliane', 'xavier', 'fabien', 'eugène', 'carole', 'sandra', 'myriam', 'amélie', 'samuel', 'gaston', 'joëlle', 'lionel', 'maryse', 'marius', 'mathis', 'océane', 'magali', 'angèle', 'muriel', 'berthe', 'martin', 'marie', 'andré', 'louis', 'alain', 'roger', 'henri', 'david', 'renée', 'bruno', 'serge', 'julie', 'annie', 'lucie', 'alice', 'lucas', 'sarah', 'manon', 'jules', 'emile', 'chloé', 'denis', 'kevin', 'laura', 'maria', 'hervé', 'anaïs', 'elise', 'agnès', 'clara', 'odile', 'simon', 'aline', 'cyril', 'irène', 'sonia', 'laure', 'fanny', 'julia', 'nadia', 'ethan', 'nelly', 'jean', 'rené', 'paul', 'anne', 'eric', 'marc', 'yves', 'emma', 'hugo', 'joël', 'léon', 'théo', 'anna', 'enzo', 'rose', 'loïc', 'jade', 'inès', 'rémi', 'axel', 'yann', 'adam', 'lola', 'rémy', 'lina', 'guy', 'léa', 'léo', 'tom', 'eva']
 
         # mapping rapide name -> index
         self.name_to_index = {name: i for i, name in enumerate(self.top)}
@@ -35,10 +17,10 @@ class FrenchNameCompressor:
         # construire alternation échappée
         escaped_names = [esc_fn(name) for name in self.top]
         alternation = '|'.join(escaped_names)
-        self.pattern_str = r'\b(' + alternation + r')\b'
+        self.pattern_str = r'(' + alternation + r')'
         # RegExp JS global (g). Pas d'i car tout est en lower-case.
         self.pattern_re = window.RegExp.new(self.pattern_str, "g")
-        self.decomp_re = window.RegExp.new(r'~([a-z]{2})', "g")
+        self.decomp_re = window.RegExp.new(r'([A-Z]{2})', "g")
 
     @staticmethod
     def _escape_for_js_regex(s):
@@ -56,19 +38,21 @@ class FrenchNameCompressor:
     def _encode(n):
         a = n // 26
         b = n % 26
-        return chr(ord('a') + a) + chr(ord('a') + b)
+        orda=ord('A')
+        return chr(orda + a) + chr(orda + b)
 
     @staticmethod
     def _decode(code):
-        return (ord(code[0]) - ord('a')) * 26 + (ord(code[1]) - ord('a'))
+        orda=ord('A')
+        return (ord(code[0]) - orda) * 26 + (ord(code[1]) - orda)
 
     def compress(self, liste_prenoms):
-        """Remplace chaque prénom (déjà en lower-case) par ~xy en utilisant RegExp JS."""
+        """Remplace chaque prénom (déjà en lower-case) par xy en utilisant RegExp JS."""
         def repl_js(*args):
             # args[1] = groupe capturé (le prénom)
             name = str(args[1]) if len(args) >= 2 else str(args[0])
             idx = self.name_to_index.get(name)
-            return '~' + self._encode(idx) if idx is not None else str(args[0])
+            return self._encode(idx) if idx is not None else str(args[0])
 
         out = []
         for s in liste_prenoms:
@@ -78,7 +62,7 @@ class FrenchNameCompressor:
         return out
 
     def decompress(self, compressed):
-        """Remplace chaque ~xy par le prénom correspondant en utilisant RegExp JS."""
+        """Remplace chaque xy par le prénom correspondant en utilisant RegExp JS."""
         def repl_code_js(*args):
             code = str(args[1])
             idx = self._decode(code)
@@ -93,9 +77,12 @@ class FrenchNameCompressor:
 
 
 # Exemple d'utilisation en Brython
-if __name__ == "__main__":
+def test():
     comp = FrenchNameCompressor()
-    src = ["alice", "bob le chat", "jeanne", "jean", "jean pierre", "antoine"]
+    src = ["alice", "bob le chat", "jeanne", "momohamed", "mohamed","jean pierre", "marc lavoine"]
     c = comp.compress(src)
+    print(f"{src=}")
     print("compress:", c)
     print("decompress:", comp.decompress(c))
+
+test()
