@@ -2,8 +2,7 @@
 Le tirage au sort de secret Santa par Aldoniel 
 en interne, tout est en lowercase. la majuscule c'est juste à l'affichage
 todo exporter l'url ap de a et on t pour que ce soit trié
-optimiser compression ac des majuscules
-déboguer l'antitriche la désactivation du lien marche pas
+
 """
 from browser import document,  html,window #window est l'objet qui donne accès au js global namespace
 from browser.local_storage import storage
@@ -22,19 +21,17 @@ class Circularcoord():
     en parcourant une liste par indice comme un tableau circulaire
     start=l'indice de départ, ex 0
     outbound=l'indice de fin, ex len-1
-    attention ne vérifie pas si size=0...
     """
     def __init__(self, start:int, outbound:int) -> None:
         self.i: int = start
         self.outbound: int = outbound
         self.size: int = self.outbound + 1
-        assert start >=0
-        assert outbound>0
+        assert start >=0,"start >=0"
+        assert outbound>=0,"outbound>=0" #cad size>0
 
     def geti(self) -> int:
-        i: int = self.i
         self.i = (self.i + 1) % self.size
-        return i
+        return self.i
 
 
 def decodeURI() -> list[str]:
@@ -82,33 +79,30 @@ class MainClass():
         self.couplage={}#dict[str,str]
         try:
             a: list[str]=decodeURI()
-            print(f"{a=}")
             a=self.comp.decompress(a)
-            print(f"{a=}")
-            assert isinstance(a,list)
-            assert len(a)>0
-            self.gens: list[str] = [item.lower() for item in a[1:]]
+            assert isinstance(a,list),"isinstance(a,list)"
+            assert len(a)>0,"len(a)"
+            self.gens: list[str] = [item.casefold() for item in a[1:]]
             self.gens.sort()
             try:
-                self.seed=int(a[0:1][0])
+                self.seed=int(a[0])
             except Exception as e:
-                print("exception lecture seed\n", e)
+                print("exception lecture seed\n" +repr(e)) 
                 self.seed=0 #le 1er élément est un entier seed
             # initialiser le dict au format joueur:destinataire
             random= RandomClass.Random(self.seed)
             self.gensmelanges=random.shuffle(self.gens) # attention, cette class renvoie une liste mélangée alors que la class builtin shuffles in place
-            c=Circularcoord(1,len(self.gensmelanges)-1)
+            c=Circularcoord(0,len(self.gensmelanges)-1)
             for item in self.gensmelanges:
                 self.couplage[item]=self.gensmelanges[c.geti()]
 
-        except AssertionError:
+        except AssertionError as e:
+            print("init main\n" +repr(e)) 
             self.gens = [""]
             self.gensmelanges=['']
             self.seed=0
             random= RandomClass.Random(self.seed)
 
-        
-        
 
     def mkurl(self,ev) -> None:
         """
@@ -118,8 +112,7 @@ class MainClass():
         bloque et return s'il y a des doublons
         """
         txtarea_val=str(document["noms"].value)
-        a: list[str] = [b for aa in txtarea_val.lower().split('\n') if (b := aa.strip())]
-        a=self.comp.compress(a) #compression
+        a: list[str] = [b for aa in txtarea_val.casefold().split('\n') if (b := aa.strip())]
         t: set[str]=set(a)
         doublons={}
         doc_url=document["url"]
@@ -145,23 +138,32 @@ class MainClass():
             fullurl:str=str(window.location.href)
             if "?" in fullurl:
                 fullurl=fullurl.split("?")[0]
-            fullurl=f"{fullurl}?{seed}&{makeURI(t)}"
+            fullurl=f"{fullurl}?{seed}&{makeURI(self.comp.compress(a))}"
             doc_url.clear()
             doc_url<= html.A(fullurl,href=fullurl)
 
-    def destinataire(self, item: str) -> None:
-            # affiche le nom du destinataire cadeau
+    def printdestinataire(self,item,ev):
+        # affiche le nom du destinataire
+        dest=document["dest"]
+        dest.clear()
+        dest.classList.add("w3-teal");
+        dest <= html.H5(f"Je suis {ev.currentTarget.textContent} et j'offrirai un cadeau à {self.couplage[item].title()}")
+
+    def destinataire(self, item: str,ev) -> None:
+            # affiche le nom du destinataire une fois
             match self.nop:
                 case 0:
-                    doc_usr <= html.P(self.couplage[item].capitalize())
+                    self.printdestinataire(item,ev)
                     storage['nop']="1"
                 case 1:
-                    doc_usr <= html.P("Sans tricher ;-)")
+                    document["pastrich"].clear()
+                    document["pastrich"] <= html.P("Sans tricher ;-)")
                 #case _ pass
             self.nop += 1
             
     def reset(self,ev):
         "supprime les contrôles une fois et retire le cheat de la session"
+        document["pastrich"].clear()
         self.nop=0
         ev.target.unbind("click")
 
@@ -175,11 +177,13 @@ class MainClass():
         doc_usr <= html.H1("Mode utilisateur")
         doc_usr <= html.H3("Secret Santa par Aldoniel ")
         doc_usr <= html.P("Clique sur ton nom pour piocher le destinataire de ton cadeau. (Attention ! Sans tricher, un seul essai)")
+        doc_usr <= html.DIV(id="dest",Class="w3-container")
+        doc_usr <= html.DIV(id="pastrich")
         
         #ajouter les boutons des gens
         if self.gens !=[""]:
             for item in self.gens:
-                doc_usr <= html.P(html.BUTTON(item.capitalize()).bind("click",lambda ev,item=item:self.destinataire(item)))#il faut créer une varible de lambda item sinon ça appelle lamda avec la dernière valeur de item
+                doc_usr <= html.P(html.BUTTON(item.title()).bind("click",lambda ev,item=item:self.destinataire(item,ev)))#il faut créer une varible de lambda item sinon ça appelle lamda avec la dernière valeur de item
         else:
             doc_usr <= html.P("Aucune personne dans l'url. Changer vers le mode créateur.")
             ToggleMode.toggle(None)
@@ -205,7 +209,12 @@ class MainClass():
 app=MainClass()
 app.main()
 
-#cheat code
+#cheat codes
 def avoue():
     print(f"{app.couplage=}")
 window.avoue=avoue
+
+def poweroverwhelming():
+    app.nop=0
+    app.destinataire=MainClass.printdestinataire.__get__(app)
+window.poweroverwhelming=poweroverwhelming

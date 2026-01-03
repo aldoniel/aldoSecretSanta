@@ -1,8 +1,17 @@
+"""
+compresse une liste de prénoms en les remplaçant par un index
+# Exemple d'utilisation
+comp = FrenchNameCompressor()
+src = ["alice", "bob le chat"]
+c = comp.compress(src)
+d = comp.decompress(c)
+"""
+
 from browser import window
 
 class FrenchNameCompressor:
     def __init__(self):
-        # TOP 300 prénoms insee 2023
+        # TOP 300 prénoms insee 2023 par len décroissante
         self.top = ['marie-christine', 'jean-françois', 'marie-thérèse', 'jean-pierre', 'jean-claude', 'jean-michel', 'christophe', 'jacqueline', 'marguerite', 'christiane', 'christelle', 'bernadette', 'anne-marie', 'jean-marie', 'jean-louis', 'emmanuelle', 'antoinette', 'dominique', 'christian', 'françoise', 'catherine', 'madeleine', 'alexandre', 'sébastien', 'christine', 'stéphanie', 'véronique', 'guillaume', 'geneviève', 'elisabeth', 'georgette', 'charlotte', 'henriette', 'micheline', 'gabrielle', 'alexandra', 'jean-marc', 'josephine', 'jean-paul', 'pierrette', 'angelique', 'philippe', 'françois', 'nathalie', 'isabelle', 'frédéric', 'stéphane', 'sandrine', 'marcelle', 'jeannine', 'paulette', 'germaine', 'patricia', 'brigitte', 'laurence', 'juliette', 'virginie', 'lucienne', 'raymonde', 'claudine', 'danielle', 'caroline', 'benjamin', 'florence', 'mathilde', 'emmanuel', 'laetitia', 'béatrice', 'mireille', 'delphine', 'michelle', 'jean-luc', 'valentin', 'baptiste', 'jonathan', 'fabienne', 'jocelyne', 'amandine', 'francine', 'huguette', 'clémence', 'fernande', 'matthieu', 'severine', 'aurélien', 'jacques', 'bernard', 'nicolas', 'georges', 'monique', 'patrick', 'maurice', 'laurent', 'martine', 'suzanne', 'thierry', 'camille', 'antoine', 'olivier', 'raymond', 'valérie', 'charles', 'vincent', 'chantal', 'gabriel', 'aurélie', 'michèle', 'gilbert', 'thérèse', 'colette', 'clément', 'anthony', 'francis', 'corinne', 'pauline', 'raphaël', 'josette', 'mathieu', 'patrice', 'sylvain', 'fabrice', 'mélanie', 'ginette', 'quentin', 'evelyne', 'florian', 'ludovic', 'josiane', 'fernand', 'liliane', 'mickael', 'simonne', 'pascale', 'mohamed', 'sabrina', 'justine', 'yannick', 'solange', 'auguste', 'etienne', 'richard', 'michael', 'vanessa', 'gregory', 'edouard', 'daniele', 'william', 'arlette', 'morgane', 'estelle', 'jessica', 'eugénie', 'lucette', 'florent', 'pierre', 'michel', 'jeanne', 'marcel', 'claude', 'daniel', 'robert', 'gérard', 'joseph', 'sylvie', 'julien', 'pascal', 'nicole', 'louise', 'hélène', 'thomas', 'denise', 'yvonne', 'sophie', 'céline', 'didier', 'maxime', 'simone', 'lucien', 'andrée', 'albert', 'yvette', 'emilie', 'romain', 'odette', 'jerome', 'cécile', 'franck', 'gilles', 'claire', 'elodie', 'alexis', 'audrey', 'adrien', 'gisèle', 'arthur', 'arnaud', 'victor', 'cedric', 'roland', 'nadine', 'annick', 'damien', 'benoît', 'marion', 'marthe', 'karine', 'nathan', 'marine', 'jeremy', 'eliane', 'xavier', 'fabien', 'eugène', 'carole', 'sandra', 'myriam', 'amélie', 'samuel', 'gaston', 'joëlle', 'lionel', 'maryse', 'marius', 'mathis', 'océane', 'magali', 'angèle', 'muriel', 'berthe', 'martin', 'marie', 'andré', 'louis', 'alain', 'roger', 'henri', 'david', 'renée', 'bruno', 'serge', 'julie', 'annie', 'lucie', 'alice', 'lucas', 'sarah', 'manon', 'jules', 'emile', 'chloé', 'denis', 'kevin', 'laura', 'maria', 'hervé', 'anaïs', 'elise', 'agnès', 'clara', 'odile', 'simon', 'aline', 'cyril', 'irène', 'sonia', 'laure', 'fanny', 'julia', 'nadia', 'ethan', 'nelly', 'jean', 'rené', 'paul', 'anne', 'eric', 'marc', 'yves', 'emma', 'hugo', 'joël', 'léon', 'théo', 'anna', 'enzo', 'rose', 'loïc', 'jade', 'inès', 'rémi', 'axel', 'yann', 'adam', 'lola', 'rémy', 'lina', 'guy', 'léa', 'léo', 'tom', 'eva']
 
         # mapping rapide name -> index
@@ -74,15 +83,3 @@ class FrenchNameCompressor:
             replaced = js_str.replace(self.decomp_re, repl_code_js)
             out.append(str(replaced))
         return out
-
-
-# Exemple d'utilisation en Brython
-def test():
-    comp = FrenchNameCompressor()
-    src = ["alice", "bob le chat", "jeanne", "momohamed", "mohamed","jean pierre", "marc lavoine"]
-    c = comp.compress(src)
-    print(f"{src=}")
-    print("compress:", c)
-    print("decompress:", comp.decompress(c))
-
-test()
